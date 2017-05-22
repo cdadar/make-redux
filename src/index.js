@@ -39,13 +39,33 @@ function dispath(action) {
     }
 }
 
+function stateChanger(state,action){
+    switch (action.type) {
+        case 'UPDATE_TITLE_TEXT':
+            state.title.text = action.text
+            break
+        case 'UPDATE_TITLE_COLOR':
+            state.title.color = action.color
+            break
+        default:
+            break
+    }
+
+}
+
 function createStore(state, stateChanger) {
     const getState = () => state
     const dispath = (action) => stateChanger(state, action)
     return { getState, dispath }
 }
 
-renderApp(appState)
-dispath({ type: 'UPDATE_TITLE_TEXT', text: '<React js 小书>' })
-dispath({ type: 'UPDATE_TITLE_COLOR', color: 'blue' })
-renderApp(appState)
+// renderApp(appState)
+// dispath({ type: 'UPDATE_TITLE_TEXT', text: '<React js 小书>' })
+// dispath({ type: 'UPDATE_TITLE_COLOR', color: 'blue' })
+// renderApp(appState)
+
+const store=createStore(appState,stateChanger)
+renderApp(store.getState())
+store.dispath({ type: 'UPDATE_TITLE_TEXT', text: '《React js 小书》' })
+store.dispath({ type: 'UPDATE_TITLE_COLOR', color: 'blue' })
+renderApp(store.getState())

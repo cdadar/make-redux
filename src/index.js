@@ -45,7 +45,44 @@ function dispath(action) {
     }
 }
 
+// function stateChanger(state, action) {
+//     switch (action.type) {
+//         case 'UPDATE_TITLE_TEXT':
+//             return {
+//                 ...state,
+//                 title: {
+//                     ...state.title,
+//                     text: action.text
+//                 }
+//             }
+//         case 'UPDATE_TITLE_COLOR':
+//             return {
+//                 ...state,
+//                 title: {
+//                     ...state.title,
+//                     color: action.color
+//                 }
+//             }
+//         default:
+//             return state
+//     }
+
+// }
+
+
 function stateChanger(state, action) {
+    if (!state) {
+        return {
+            title: {
+                text: 'React js 小书',
+                color: 'red'
+            },
+            content: {
+                text: 'React js 小书内容',
+                color: 'bule'
+            }
+        }
+    }
     switch (action.type) {
         case 'UPDATE_TITLE_TEXT':
             return {
@@ -66,8 +103,8 @@ function stateChanger(state, action) {
         default:
             return state
     }
-
 }
+
 
 // function createStore(state, stateChanger) {
 //     const listeners = []
@@ -80,14 +117,27 @@ function stateChanger(state, action) {
 //     return { getState, dispatch, subscribe }
 // }
 
-function createStore(state, stateChanger) {
+// function createStore(state, stateChanger) {
+//     const listeners = []
+//     const subscribe = (listener) => listeners.push(listener)
+//     const getState = () => state
+//     const dispatch = (action) => {
+//         state = stateChanger(state, action) // 覆盖原对象
+//         listeners.forEach((listener) => listener())
+//     }
+//     return { getState, dispatch, subscribe }
+// }
+
+function createStore(reducer) {
+    let state=null
     const listeners = []
     const subscribe = (listener) => listeners.push(listener)
     const getState = () => state
     const dispatch = (action) => {
-        state = stateChanger(state, action) // 覆盖原对象
+        state = reducer(state, action) // 覆盖原对象
         listeners.forEach((listener) => listener())
     }
+    dispatch()
     return { getState, dispatch, subscribe }
 }
 
@@ -108,3 +158,20 @@ renderApp(store.getState())
 store.dispatch({ type: 'UPDATE_TITLE_TEXT', text: '《React js 小书》' })
 store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'blue' })
 //renderApp(store.getState())
+
+// function themeReducer (state, action) {
+//   if (!state) return {
+//     themeName: 'Red Theme',
+//     themeColor: 'red'
+//   }
+//   switch (action.type) {
+//     case 'UPATE_THEME_NAME':
+//       return { ...state, themeName: action.themeName }
+//     case 'UPATE_THEME_COLOR':
+//       return { ...state, themeColor: action.themeColor }
+//     default:
+//       return state
+//   }
+// }
+
+// const store = createStore(themeReducer)
